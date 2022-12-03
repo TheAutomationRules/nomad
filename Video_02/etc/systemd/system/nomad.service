@@ -1,0 +1,17 @@
+[Unit]
+Description=Nomad Agent
+Documentation=https://www.nomadproject.io/docs/
+Requires=network-online.target
+After=network-online.target
+ConditionFileNotEmpty=/etc/nomad.d/nomad.hcl
+
+[Service]
+WorkingDirectory=/etc/nomad.d
+ProtectHome=read-only
+Restart=on-failure
+ExecStart=nomad agent -server -config=/etc/nomad.d/nomad.hcl
+ExecReload=/bin/kill -HUP
+KillSignal=SIGTERM
+
+[Install]
+WantedBy=multi-user.target
